@@ -8,13 +8,13 @@ const String baseUrl = "https://hacker-news.firebaseio.com/v0";
 class NewsApiProvider {
   Client client = Client();
 
-  fetchTopIds() async {
+  Future<List<int>> fetchTopIds() async {
     final response = await client.get('$baseUrl/topstories.json');
     final ids = json.decode(response.body);
-    return ids;
+    return ids.cast<int>();
   }
 
-  fetchItemFromId(int id) async {
+  Future<ItemModel> fetchItemFromId(int id) async {
     final response = await client.get('$baseUrl/item/$id.json');
     final parsedJson = json.decode(response.body);
     return ItemModel.fromJson(parsedJson);
