@@ -1,22 +1,26 @@
-import 'package:http/http.dart' show Client;
 import 'dart:convert';
+import 'package:http/http.dart' show Client, Response;
 
 import 'package:news/models/item_modal.dart';
+import 'package:news/resources/repository.dart';
 
-const String baseUrl = "https://hacker-news.firebaseio.com/v0";
+const String baseUrl = 'https://hacker-news.firebaseio.com/v0';
 
-class NewsApiProvider {
+class NewsApiProvider implements Source {
   Client client = Client();
 
+  @override
   Future<List<int>> fetchTopIds() async {
-    final response = await client.get('$baseUrl/topstories.json');
-    final ids = json.decode(response.body);
-    return ids.cast<int>();
+    final Response response = await client.get('$baseUrl/topstories.json');
+    final List<int> ids = json.decode(response.body) as List<int>;
+    return ids;
   }
 
-  Future<ItemModel> fetchItemFromId(int id) async {
-    final response = await client.get('$baseUrl/item/$id.json');
-    final parsedJson = json.decode(response.body);
+  @override
+  Future<ItemModel> fetchItem(int id) async {
+    final Response response = await client.get('$baseUrl/item/$id.json');
+    final Map<String, dynamic> parsedJson =
+        json.decode(response.body) as Map<String, dynamic>;
     return ItemModel.fromJson(parsedJson);
   }
 }

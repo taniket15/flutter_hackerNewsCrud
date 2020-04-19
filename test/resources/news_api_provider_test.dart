@@ -17,14 +17,14 @@ void main() {
     expect(ids, [1, 2, 3]);
   });
 
-  test('fetchItemFromId retuns a item object', () async {
+  test('fetchItem retuns a item object', () async {
     final newsApi = NewsApiProvider();
     newsApi.client = MockClient((request) async {
       final jsonMap = {'id': 12345};
       return Response(json.encode(jsonMap), 200);
     });
 
-    final item = await newsApi.fetchItemFromId(12345) as ItemModel;
+    final item = await newsApi.fetchItem(12345);
 
     expect(item.id, 12345);
   });
